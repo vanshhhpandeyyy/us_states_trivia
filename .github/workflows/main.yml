@@ -30,7 +30,7 @@ jobs:
     - name: Run frontend tests
       working-directory: front
       run: npm test
-      
+
     - name: Compile backend Java code
       working-directory: back
       run: |
@@ -38,9 +38,12 @@ jobs:
         javac -d out $(find src -name "*.java") $(find tests -name "*.java")
 
     - name: Run backend tests
-      working-directory: back
+      working-directory: back/out
       run: |
-        java -cp "out:lib/*" org.junit.platform.console.ConsoleLauncher --scan-class-path
+          for class in $(find . -name "*.class" | grep "Test" | sed 's|^./||;s|\.class$||;s|/|.|g'); do
+            echo "Running $class"
+            java "$class"
+          done
 
     - name: Cache SonarCloud packages
       uses: actions/cache@v4
