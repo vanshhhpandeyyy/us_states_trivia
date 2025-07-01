@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class States {
     private static final Logger LOGGER = Logger.getLogger(States.class.getName());
-    static Set <String> validStates = new HashSet <> (Arrays.asList(
+    public static Set <String> validStates = new HashSet <> (Arrays.asList(
         "maine", "rhode island", "connecticut", "maryland", "vermont", "virginia", "west virginia", "north carolina", "south carolina"
         , "new york", "new jersey", "new hampshire", "pennsylvania", "massachusetts", "delaware", "georgia", "florida", "texas", "louisiana"
         , "kansas", "arkansas", "kentucky", "oklahoma", "ohio", "alabama", "tennessee", "california", "arizona", "utah", "colorado"
