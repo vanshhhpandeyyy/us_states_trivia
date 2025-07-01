@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>US States Trivia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background: #f9f9f9;
+    }
+    #game, #endScreen {
+      display: none;
+    }
+    input {
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+    #timer {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Start Screen -->
+  <div id="startScreen">
+    <h2>Are you ready to name all US states in 5 minutes?</h2>
+    <button onclick="startGame()">Start</button>
+  </div>
+
+  <!-- Game Interface -->
+  <div id="game">
+    <p id="timer">Time Left: 5:00</p>
+    <input type="text" id="stateInput" placeholder="Enter state name" />
+    <button onclick="submitState()">Submit</button>
+    <p id="result"></p>
+    <p>Score: <span id="score">0</span>/50</p>
+    <button onclick="endGame(false)">Give Up</button>
+  </div>
+
+  <!-- End Screen -->
+  <div id="endScreen">
+    <h2 id="endMessage"></h2>
+    <p>Final Score: <span id="finalScore"></span>/50</p>
+    <button onclick="restart()">Restart</button>
+  </div>
+
+  <script>
+    let score = 0;
+    let timeLeft = 300; // 5 minutes = 300 seconds
+    let timerInterval;
+    const correct = new Set();
+
+    function startGame() {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      if (timeLeft <= 0) {
+        endGame(false);
+        return;
+      }
+      timeLeft--;
+      const min = Math.floor(timeLeft / 60);
+      const sec = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById("timer").innerText = `Time Left: ${min}:${sec}`;
+    }
+
+    async function submitState() {
+      const input = document.getElementById("stateInput");
+      const state = input.value.trim();
+
+      const res = await fetch("/check", {
+        method: "POST",
+        body: state
+      });
+      const text = await res.text();
+
+      if (text === "valid" && !correct.has(state.toLowerCase())) {
+        correct.add(state.toLowerCase());
+        score++;
+        document.getElementById("result").innerText = "Correct!";
+      } else if (correct.has(state.toLowerCase())) {
+        document.getElementById("result").innerText = "Already entered.";
+      } else {
+        document.getElementById("result").innerText = "Invalid.";
+      }
+
+      document.getElementById("score").innerText = score;
+      input.value = "";
+
+      if (score === 50) {
+        endGame(true);
+      }
+    }
+
+    function endGame(won) {
+      clearInterval(timerInterval);
+      document.getElementById("game").style.display = "none";
+      document.getElementById("endScreen").style.display = "block";
+      document.getElementById("endMessage").innerText = won ? "🎉 You Won!" : "😢 You Lost.";
+      document.getElementById("finalScore").innerText = score;
+    }
+
+    function restart() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>
+
