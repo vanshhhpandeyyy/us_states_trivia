@@ -27,10 +27,10 @@ jobs:
       working-directory: front
       run: npm install
 
-    - name: Run frontend tests with coverage
+    - name: Run frontend tests
       working-directory: front
-      run: npm test -- --coverage
-
+      run: npm test
+      
     - name: Compile backend Java code
       working-directory: back
       run: |

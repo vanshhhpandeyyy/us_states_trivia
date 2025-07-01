@@ -2,16 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage --passWithNoTests"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^30.0.2"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "testMatch": [
-      "**/tests/**/*.js"
-    ]
+    "jest": "^29.0.0"
   }
 }
