@@ -20,7 +20,7 @@ public class States {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         
         server.createContext("/", exchange -> {
-            byte[] content = Files.readAllBytes(Paths.get("V:/Documents/Trivia/front/src/index.html"));
+            byte[] content = Files.readAllBytes(Paths.get("V:/Documents/Projects/Trivia/front/src/index.html"));
             exchange.sendResponseHeaders(200, content.length);
             exchange.getResponseBody().write(content);
             exchange.close();
